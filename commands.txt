@@ -1,0 +1,53 @@
+
+# creates default chart
+helm create my-todo-chart
+
+# edit chart
+
+# install chart
+helm install my-todo-release my-todo-chart
+
+# install YAML linter
+pip install yamllint
+
+# run YAML linter to find errors in yaml files
+yamllint my-todo-chart/templates/deployment.yaml
+
+# See uploaded pods
+kubectl get pods
+
+# See installed releases
+helm list
+
+# Add service NodePort
+
+# upgrade the release
+helm upgrade --install my-todo-release my-todo-chart
+
+# To get the application url (service) on minikube
+minikube service my-todo-release-my-todo-chart --url
+
+# This will create a .tgz file of your chart in the current directory.
+cd my-todo-chart
+helm package .
+
+# install chartmuseum repository in my Kubernetes for storing my charts
+cd k8s-experts/helm
+helm install chartmuseum ./chartmuseum -f chartmuseum-values.yaml
+
+# install plugin for helm push
+helm plugin install https://github.com/chartmuseum/helm-push
+
+# expose the chartmuseum service
+minikube service chartmuseum-chartmuseum --url
+
+# add repository of chartmuseum
+helm repo add chartmuseum http://127.0.0.1:63340
+
+helm repo update
+
+# push my chart to chartmuseum
+helm push ./my-todo-chart-0.1.0.tgz http://127.0.0.1:63340/
+helm push ./my-todo-chart-0.1.0.tgz chartmuseum
+
+

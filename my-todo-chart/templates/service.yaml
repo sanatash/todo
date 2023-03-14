@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "my-todo-chart.fullname" . }}
+  labels:
+    {{- include "my-todo-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      name: http
+  selector:
+    {{- include "my-todo-chart.selectorLabels" . | nindent 4 }}
